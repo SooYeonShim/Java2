@@ -1,0 +1,177 @@
+package test;
+
+
+
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+
+
+class Result {
+
+    /*
+     * Complete the 'areAlmostEquivalent' function below.
+     *
+     * The function is expected to return a STRING_ARRAY.
+     * The function accepts following parameters:
+     *  1. STRING_ARRAY s
+     *  2. STRING_ARRAY t
+     */
+
+    public static List<String> areAlmostEquivalent(List<String> s, List<String> t) {
+    // Write your code here
+
+    List<String> result = new ArrayList<String>();
+    int maxDiffer =0;
+    int differ=0;
+  
+
+    for (int i = 0; i < s.size();i++){
+        String a = s.get(i);
+        String b = t.get(i);
+
+        //길이가 다르면 NO를 추가하고 재시작
+        if (a.length()!= b.length()){
+            result.add("NO");
+            continue;
+        }
+        //a~z까지 다 넣어서 비교할까..
+        //문자열 정렬
+       char[] AChar = a.toCharArray();
+       Arrays.asList(AChar);
+      // a = AChar.toString();
+       char[] BChar = b.toCharArray();
+       Arrays.asList(BChar);
+    //   b = BChar.toString();
+        for(int j =0;j<AChar.length;j++){
+            if (AChar[j] == BChar[j]){
+               // maxDiffer = differ;
+                differ = 0;
+            }else if (j>0 && AChar[j-1] != AChar[j] && BChar[j-1] != BChar[j]){
+                differ =0;
+            }else{
+                differ++;
+            }
+       if (differ>maxDiffer){
+            maxDiffer = differ;
+        }
+           System.out.println("differ:" +differ);
+             System.out.println("maxDiffer:" +maxDiffer);
+        }
+
+        if (maxDiffer<=3){
+            result.add("YES");
+        }else{
+            result.add("NO");
+        }
+        maxDiffer =0;
+        differ =0;
+
+    }
+    
+    
+
+    return result;
+    }
+
+}
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int sCount = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<String> s = IntStream.range(0, sCount).mapToObj(i -> {
+            try {
+                return bufferedReader.readLine();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        })
+            .collect(toList());
+
+        int tCount = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<String> t = IntStream.range(0, tCount).mapToObj(i -> {
+            try {
+                return bufferedReader.readLine();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        })
+            .collect(toList());
+
+        List<String> result = Result.areAlmostEquivalent(s, t);
+
+        bufferedWriter.write(
+            result.stream()
+                .collect(joining("\n"))
+            + "\n"
+        );
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
+
+
+
+//1번
+class Result {
+
+    /*
+     * Complete the 'reduceCapacity' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY model as parameter.
+     */
+
+    public static int reduceCapacity(List<Integer> model) {
+
+        int half = (int)Math.ceil(model.size()/2.0);
+        int count = 0;
+        int sum = 0;
+        int result =0;
+        List<Integer> numberOfModel = new ArrayList<Integer>();
+        Collections.sort(model);
+         //System.out.println("model " + model.toString());
+       //  System.out.println("half " + half);
+        for (int i = 0; i<model.size();i++){
+           
+            if ((i>0 && model.get(i)!= model.get(i-1))){
+                numberOfModel.add(count);
+                count =0;
+            }
+             count++;
+        }
+        numberOfModel.add(count);
+       // System.out.println("numberOfModel " + numberOfModel);
+        Collections.sort(numberOfModel);
+       // System.out.println("numberOfModel " + numberOfModel);
+        for(int i = numberOfModel.size()-1; i>=0;i-- ){
+            result++;
+            sum += numberOfModel.get(i);
+         //   System.out.println("sum " + sum);
+            if (sum>= half){
+            //    System.out.println("result " + result);
+                return result;
+            }
+        
+        }
+
+      
+        return result;
+    }
+
+
